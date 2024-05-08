@@ -10,7 +10,6 @@ import (
 	"math"
 	"math/rand"
 	"strings"
-	"time"
 
 	"github.com/fogleman/gg"
 )
@@ -111,7 +110,7 @@ func DefaultSettings() *Settings {
 // totalSize specifies the total size in pixels. It is recommended that
 // this is divisible by 3.
 func Render(code uint64, totalSize int, settings *Settings) (image.Image, error) {
-	rand.Seed(time.Now().Unix())
+	rnd := rand.New(rand.NewSource(int64(code % math.MaxInt32)))
 
 	penWidth := 1
 
@@ -130,12 +129,12 @@ func Render(code uint64, totalSize int, settings *Settings) (image.Image, error)
 
 	middleType = middlePatchSet[middleType]
 
-	randomFirstColor := settings.ColorPalette[rand.Intn(len(settings.ColorPalette))]
+	randomFirstColor := settings.ColorPalette[rnd.Intn(len(settings.ColorPalette))]
 	red, green, blue, err := hexConvert(randomFirstColor.Code)
 	if err != nil {
 		return nil, err
 	}
-	randomSecondColor := settings.ColorPalette[rand.Intn(len(settings.ColorPalette))]
+	randomSecondColor := settings.ColorPalette[rnd.Intn(len(settings.ColorPalette))]
 	secondRed, secondGreen, secondBlue, err := hexConvert(randomSecondColor.Code)
 	if err != nil {
 		return nil, err
@@ -158,7 +157,7 @@ func Render(code uint64, totalSize int, settings *Settings) (image.Image, error)
 	patchSize := float64(totalSize) / 3
 
 	if !settings.TransparentBackground {
-		randomBackgroundColor := settings.BackgroundColors[rand.Intn(len(settings.BackgroundColors))]
+		randomBackgroundColor := settings.BackgroundColors[rnd.Intn(len(settings.BackgroundColors))]
 		bgRed, bgGreen, bgBlue, err := hexConvert(randomBackgroundColor)
 		if err != nil {
 			return nil, err
