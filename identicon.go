@@ -114,18 +114,20 @@ func Render(code uint64, totalSize int, settings *Settings) (image.Image, error)
 	rand.Seed(time.Now().Unix())
 
 	penWidth := 1
+
 	middleType := int(code & 0x03)
 	middleInvert := code>>2&0x01 == 1
-	middleInvert = false
+
 	cornerType := int(code >> 3 & 0x0f)
 	cornerInvert := code>>7&0x01 == 1
-	cornerInvert = false
 	cornerTurn := int(code >> 8 & 0x03)
+
 	sideType := int(code >> 10 & 0x0f)
 	sideInvert := code>>14&0x01 == 1
-	sideInvert = false
 	sideTurn := int(code >> 15 & 0x03)
+
 	swapCross := code>>47&0x01 == 1
+
 	middleType = middlePatchSet[middleType]
 
 	randomFirstColor := settings.ColorPalette[rand.Intn(len(settings.ColorPalette))]
