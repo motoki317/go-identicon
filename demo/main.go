@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/fivenp/go-identicon"
 	"bytes"
+	"github.com/motoki317/go-identicon"
 	"image/png"
 	"log"
 	"net/http"
@@ -12,7 +12,6 @@ import (
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
-
 	args := strings.Split(r.URL.Path, "/")
 	args = args[1:]
 
@@ -37,7 +36,11 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 	//log.Printf("got settings '%s'\n", settings)
 
-	img := identicon.Render(code, size, settings)
+	img, err := identicon.Render(code, size, settings)
+	if err != nil {
+		log.Println("unable to render image:", err)
+		return
+	}
 
 	log.Printf("creating identicon for '%s'\n", item)
 
@@ -51,8 +54,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	if _, err := w.Write(buffer.Bytes()); err != nil {
 		log.Println("unable to write image.")
 	}
-
-	return
 }
 
 func main() {

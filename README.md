@@ -17,7 +17,7 @@ import (
 	"image/png"
 	"os"
 
-	"github.com/fivenp/go-identicon"
+	"github.com/motoki317/go-identicon"
 )
 
 func main() {
